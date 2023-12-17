@@ -43,8 +43,8 @@ end
     param::HHPara = HHPara{FT}()
     p::Float64
     N::UInt16                           # the number of neurons
-    v::Vector{FT} = fill(-61.77, N)     # the voltage of membrane
-    m::Vector{FT} = fill(0.08,N); h::Vector{FT} = fill(0.48,N); n::Vector{FT} = fill(0.36,N); # the gating value
+    v::Vector{FT} = fill(-60, N)     # the voltage of membrane
+    m::Vector{FT} = fill(0.053,N); h::Vector{FT} = fill(0.594,N); n::Vector{FT} = fill(0.319,N); # the gating value
     r::Vector{FT} = zeros(N)           # the recovery variable
     connectome::Matrix = NWnetworks(N, p)
     connectomeGraph::SimpleGraph = Graph(connectome)
@@ -82,7 +82,7 @@ function genIexs(iNum, λ; T = 200, dt = 0.01, iInterval = 0.1, IMax= 100)
 	t = collect(0:dt:T)
 	intervals = -log.(1 .- rand(iNum, trunc(Int64, T / (1 / λ) * 1.2) + 100)) ./ λ
 	it = cumsum(intervals, dims = 2)
-	N::Int64 = iInterval / dt
+	N::Int64 = trunc(Int64,iInterval / dt)
 	startPoint = [it2idx(row;dt=dt)[it2idx(row;dt=dt) .< length(t)] for row in eachrow(it)]
 	iexTime = vcat.([startPoint .+ i .* ones.(Int64, length.(startPoint)) for i in 0:N-1]...)
 	iexs = [zeros(length(t)) for i in 1:iNum]
